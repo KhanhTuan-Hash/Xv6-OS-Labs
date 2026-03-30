@@ -80,3 +80,19 @@ kalloc(void)
     memset((char*)r, 5, PGSIZE); // fill with junk
   return (void*)r;
 }
+
+uint64
+count_freemem(void)
+{
+  struct run *r;
+  uint64 count = 0;
+
+  acquire(&kmem.lock); // Lock to securely read data
+  r = kmem.freelist;
+  while(r){
+    count += PGSIZE; // Each free block has a size of PGSIZE (4096 bytes)
+    r = r->next; // Move to the next free block
+  }
+  release(&kmem.lock);
+  return count;
+}
