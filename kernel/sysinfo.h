@@ -1,5 +1,6 @@
+// kernel/sysinfo.h
 struct sysinfo {
-    uint64 freemem; // Number of free memory bytes
-    uint64 nproc; // Number of processes with a state other than UNUSED
-    uint64 nopenfiles; // Number of open files in the entire system
+    uint64 freemem;    // Number of free memory bytes [cite: 137]
+    uint64 nproc;      // Number of processes with a state other than UNUSED [cite: 137]
+    uint64 nopenfiles; // Number of open files in the entire system [cite: 137]
 };
