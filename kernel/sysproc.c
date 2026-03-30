@@ -105,3 +105,37 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+uint64
+sys_trace(void)
+{
+  int mask;
+ // Use argint to get the first argument (mask) from the user space
+  argint(0, &mask);
+
+  // Assign a mask to the current process structure to indicate
+  // which system calls to be traced
+  myproc()->trace_mask = mask;
+  return 0;
+}
+
+uint64
+sys_sysinfo(void)
+{
+  uint64 addr;
+  struct sysinfo info;
+
+  // Get the address of the struct sysinfo pointer from the user passed in
+  argaddr(0, &addr);
+
+  // Assign data by calling the 3 functions just written
+  info.freemem = count_freemem();
+  info.nproc = count_nproc();
+  info.nopenfiles = count_nopenfiles();
+
+  // Using copyout to copy data from kernel (info) to user space (addr)
+  if(copyout(myproc()->pagetable, addr, (char *)&info, sizeof(info)) < 0)
+    return -1;
+
+  return 0;
+}
