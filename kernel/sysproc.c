@@ -105,3 +105,16 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+uint64
+sys_trace(void)
+{
+  int mask;
+ // Use argint to get the first argument (mask) from the user space
+  argint(0, &mask);
+
+  // Assign a mask to the current process structure to indicate
+  // which system calls to be traced
+  myproc()->trace_mask = mask;
+  return 0;
+}
